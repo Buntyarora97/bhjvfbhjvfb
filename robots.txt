@@ -1,0 +1,43 @@
+User-agent: *
+Allow: /
+Allow: /index.php
+Allow: /products.php
+Allow: /product-detail.php
+Allow: /blog.php
+Allow: /blog-post.php
+Allow: /about.php
+Allow: /contact.php
+Allow: /sitemap.xml
+
+# Disallow admin and account/transactional pages
+Disallow: /admin/
+Disallow: /ajax/
+Disallow: /cart.php
+Disallow: /checkout.php
+Disallow: /account.php
+Disallow: /profile.php
+Disallow: /orders.php
+Disallow: /order-detail.php
+Disallow: /wishlist.php
+Disallow: /cashfree-*
+Disallow: /payu-*
+Disallow: /instamojo-*
+Disallow: /debug.php
+Disallow: /check-unused.php
+Disallow: /checkip.php
+Disallow: /vendor/
+Disallow: /*.sql$
+Disallow: /*.sh$
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+Sitemap: https://livvra.in/sitemap.xml
+Sitemap: https://www.livvra.in/sitemap.xml
