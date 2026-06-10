@@ -382,9 +382,9 @@
                         echo $colors[$cat['id'] % count($colors)]; 
                     ?> !important;">
                         <?php if (!empty($cat['icon_upload'])): ?>
-                            <img src="uploads/categories/<?php echo htmlspecialchars($cat['icon_upload']); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>">
+                            <img src="uploads/categories/<?php echo htmlspecialchars($cat['icon_upload']); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>" loading="lazy" decoding="async">
                         <?php elseif (!empty($cat['image'])): ?>
-                            <img src="uploads/categories/<?php echo htmlspecialchars($cat['image']); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>">
+                            <img src="uploads/categories/<?php echo htmlspecialchars($cat['image']); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>" loading="lazy" decoding="async">
                         <?php else: ?>
                             <div class="flex items-center justify-center w-full h-full bg-[#f1f8f1]">
                                 <i class="fa <?php echo htmlspecialchars($cat['icon_class'] ?? 'fa-leaf'); ?>" style="color: #76a33a; font-size: 20px;"></i>
@@ -543,10 +543,10 @@
                     <div class="w-7 h-7 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
                         <?php if (!empty($cat['icon_upload'])): ?>
                             <img src="uploads/categories/<?php echo htmlspecialchars($cat['icon_upload']); ?>" 
-                                 class="w-full h-full object-cover">
+                                 class="w-full h-full object-cover" loading="lazy" decoding="async">
                         <?php elseif (!empty($cat['image'])): ?>
                             <img src="uploads/categories/<?php echo htmlspecialchars($cat['image']); ?>" 
-                                 class="w-full h-full object-cover">
+                                 class="w-full h-full object-cover" loading="lazy" decoding="async">
                         <?php else: ?>
                             <div class="w-full h-full flex items-center justify-center bg-[#f1f8f1]">
                                 <i data-lucide="leaf" class="w-3 h-3 text-[#76a33a]"></i>
@@ -1490,9 +1490,9 @@ $link = "https://livvra.in/product-detail.php?id=".$reel['product_id'];
 
     <div class="reel-video">
 
-        <!-- Voice enabled: muted hata diya, volume icon add kiya -->
-        <video autoplay loop playsinline controlsList="nodownload" onvolumechange="handleVolume(this)">
-            <source src="uploads/reels/<?php echo htmlspecialchars($reel['video']); ?>" type="video/mp4">
+        <!-- Lazy load: preload=none prevents download until visible -->
+        <video loop playsinline muted preload="none" controlsList="nodownload" onvolumechange="handleVolume(this)"
+               data-src="uploads/reels/<?php echo htmlspecialchars($reel['video']); ?>">
         </video>
 
         <!-- Volume Toggle Button -->
@@ -1981,27 +1981,24 @@ window.onclick = function(e){
     }
 }
 
-// Auto-play videos when in viewport
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.5
-};
-
+// Lazy-load + auto-play videos when in viewport
 const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         const video = entry.target;
         if (entry.isIntersecting) {
-            video.play();
+            // Load src the first time it becomes visible
+            if (!video.src && video.dataset.src) {
+                video.src = video.dataset.src;
+                video.load();
+            }
+            video.play().catch(function(){});
         } else {
             video.pause();
         }
     });
-}, observerOptions);
+}, { root: null, rootMargin: '100px', threshold: 0.25 });
 
-// Observe all videos
-document.querySelectorAll('.reel-video video').forEach(video => {
-    video.muted = true; // Start muted
+document.querySelectorAll('.reel-video video[data-src]').forEach(video => {
     videoObserver.observe(video);
 });
 </script>
@@ -5201,25 +5198,30 @@ if ($_homeBlockEnabled === '1' && !empty(trim(strip_tags($_homeBlockHtml)))):
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-new Swiper(".dealSwiper", {
-  slidesPerView:5,
-  spaceBetween:30,
-  loop:true,
-  autoplay:{
-    delay:3500,
-    disableOnInteraction:false,
-    reverseDirection: true,
-    pauseOnMouseEnter: true
-  },
-  navigation:{nextEl:".dealNext",prevEl:".dealPrev"},
-  breakpoints:{
-    0:{slidesPerView:1},
-    480:{slidesPerView:2},
-    768:{slidesPerView:3},
-    1024:{slidesPerView:4},
-    1400:{slidesPerView:5}
-  }
-});
+var dealEl = document.querySelector(".dealSwiper");
+if (dealEl) {
+  var dealSlides = dealEl.querySelectorAll(".swiper-slide").length;
+  var dealPerView = window.innerWidth >= 1400 ? 5 : window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : window.innerWidth >= 480 ? 2 : 1;
+  new Swiper(dealEl, {
+    slidesPerView:5,
+    spaceBetween:30,
+    loop: dealSlides > dealPerView,
+    autoplay:{
+      delay:3500,
+      disableOnInteraction:false,
+      reverseDirection: true,
+      pauseOnMouseEnter: true
+    },
+    navigation:{nextEl:".dealNext",prevEl:".dealPrev"},
+    breakpoints:{
+      0:{slidesPerView:1},
+      480:{slidesPerView:2},
+      768:{slidesPerView:3},
+      1024:{slidesPerView:4},
+      1400:{slidesPerView:5}
+    }
+  });
+}
 
 /* Countdown - 12 hours from now */
 function timer(){

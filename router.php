@@ -30,6 +30,10 @@ if (preg_match('/\.(jpe?g|png|gif|webp)$/i', $uri)) {
     header('Cache-Control: public, max-age=2592000');
     header('Vary: Accept');
 }
+if (preg_match('/\.mp4$/i', $uri)) {
+    header('Cache-Control: public, max-age=2592000');
+    header('Accept-Ranges: bytes');
+}
 
 // ---------- 1. WebP transparent serve ----------
 if (preg_match('/\.(jpe?g|png)$/i', $uri)) {

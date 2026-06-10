@@ -619,7 +619,9 @@
         </script>
         <div id="video-popup-container"></div>
         <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+          // Delay popup 3s after full page load — doesn't affect LCP/FCP
+          setTimeout(function() {
             fetch('ajax/video_popup_handler.php?action=get_active')
                 .then(res => res.json())
                 .then(data => {
@@ -710,6 +712,7 @@
                         }
                     }
                 });
+          }, 3000); // 3s delay — popup loads after page is interactive
         });
         </script>
 

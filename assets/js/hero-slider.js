@@ -13,9 +13,10 @@
         // ── Hero / Banner Swiper ──────────────────────
         var heroEl = document.querySelector('.hero-swiper, .swiper-hero, [data-swiper="hero"]');
         if (heroEl && !heroEl.swiper) {
+            var heroSlides = heroEl.querySelectorAll('.swiper-slide').length;
             new Swiper(heroEl, {
-                loop: true,
-                autoplay: { delay: 4500, disableOnInteraction: false },
+                loop: heroSlides > 1,
+                autoplay: heroSlides > 1 ? { delay: 4500, disableOnInteraction: false } : false,
                 speed: 700,
                 effect: 'fade',
                 fadeEffect: { crossFade: true },
@@ -55,9 +56,11 @@
         // ── Testimonial / Google Review Swiper ────────
         document.querySelectorAll('.testimonial-swiper, [data-swiper="testimonials"]').forEach(function (el) {
             if (!el.swiper) {
+                var slides = el.querySelectorAll('.swiper-slide').length;
+                var perView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
                 new Swiper(el, {
-                    loop: true,
-                    autoplay: { delay: 4000, disableOnInteraction: false },
+                    loop: slides > perView,
+                    autoplay: slides > 1 ? { delay: 4000, disableOnInteraction: false } : false,
                     slidesPerView: 1,
                     spaceBetween: 20,
                     breakpoints: {
