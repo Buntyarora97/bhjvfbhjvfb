@@ -60,7 +60,9 @@ class Order {
         error_log("SQL Params: " . print_r($params, true));
         
         $stmt->execute($params);
-        $orderId = $db->lastInsertId();
+        // PostgreSQL requires sequence name; MySQL ignores it — works for both
+        $orderId = $db->lastInsertId('orders_id_seq');
+        if (!$orderId) $orderId = $db->lastInsertId();
         
         error_log("New Order Created - ID: $orderId, Order No: $orderNumber");
         

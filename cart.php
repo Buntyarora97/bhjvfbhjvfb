@@ -1673,9 +1673,9 @@ document.querySelectorAll('.remove-form').forEach(form => {
 <link rel="stylesheet" href="/assets/css/aos.min.css">
 <script src="/assets/js/aos.min.js" defer></script>
 <script>
-    AOS.init({
-        duration: 600,
-        once: true,
-        offset: 50
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof AOS !== 'undefined') {
+            AOS.init({ duration: 600, once: true, offset: 50 });
+        }
     });
 </script>

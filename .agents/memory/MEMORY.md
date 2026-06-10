@@ -1,1 +1,4 @@
-- [Livvra PHP e-commerce setup](livvra-setup.md) — PHP 8.2 + PostgreSQL app; schema must include display_order on google_reviews/faqs, and many extra columns on orders/products/blogs/home_banners.
+- [JS root cause fix](js-root-cause.md) — main.js and hero-slider.js were emptied during "speed optimization"; must never be cleared.
+- [PostgreSQL lastInsertId](pg-lastinsertid.md) — use lastInsertId('orders_id_seq') for PostgreSQL; MySQL ignores the arg; works for both.
+- [Schema promo column](schema-promo.md) — promo_codes table had expires_at but code uses expiry_date; renamed in DB. New tables: promo_code_usage, reward_coins, coin_transactions.
+- [AOS defer timing](aos-defer.md) — AOS.init() called inline after a defer script fails; must wrap in DOMContentLoaded.

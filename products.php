@@ -2030,14 +2030,14 @@ document.querySelectorAll('.action-form').forEach(function(form) {
 }
 </style>
 
-<!-- AOS Animation Library (Add in header.php) -->
+<!-- AOS Animation Library -->
 <link rel="stylesheet" href="/assets/css/aos.min.css">
 <script src="/assets/js/aos.min.js" defer></script>
 <script>
-    AOS.init({
-        duration: 600,
-        once: true,
-        offset: 50
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof AOS !== 'undefined') {
+            AOS.init({ duration: 600, once: true, offset: 50 });
+        }
     });
 </script>
 
