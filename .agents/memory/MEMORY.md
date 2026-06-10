@@ -1,0 +1,1 @@
+- [Livvra PHP e-commerce setup](livvra-setup.md) — PHP 8.2 + PostgreSQL app; schema must include display_order on google_reviews/faqs, and many extra columns on orders/products/blogs/home_banners.
